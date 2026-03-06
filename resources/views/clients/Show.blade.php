@@ -62,11 +62,6 @@
         </div>
     </div>
 
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-        <div style="font-size: 13px; color: var(--text-muted);">Projectes ({{ $client->projectes->count() }})</div>
-        <a href="{{ route('clients.projectes', $client) }}" class="btn btn-ghost btn-sm">Veure tots</a>
-    </div>
-
     <div class="table-wrap">
         <table>
             <thead>

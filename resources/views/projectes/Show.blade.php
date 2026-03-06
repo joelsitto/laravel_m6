@@ -51,29 +51,15 @@
                 <span class="field-value"
                       style="font-family: var(--mono);">{{ $projecte->data_inici?->format('d/m/Y') ?? '—' }}</span>
             </div>
-            <div class="field">
-                <span class="field-label">Fi prevista</span>
-                <span class="field-value"
-                      style="font-family: var(--mono);">{{ $projecte->data_fi_prevista?->format('d/m/Y') ?? '—' }}</span>
-            </div>
-            @if($projecte->data_fi_real)
+            @if($projecte->data_fi_prevista)
                 <div class="field">
-                    <span class="field-label">Fi real</span>
-                    <span class="field-value"
-                          style="font-family: var(--mono);">{{ $projecte->data_fi_real->format('d/m/Y') }}</span>
+                    <span class="field-label">Fi prevista</span>
+                    <span class="field-value" style="font-family: var(--mono);">{{ $projecte->data_fi_prevista->format('d/m/Y') }}</span>
                 </div>
             @endif
             <div class="field">
-                <span class="field-label">Hores estimades</span>
-                <span class="field-value"
-                      style="font-family: var(--mono);">{{ $projecte->pressupost_hores_estimades }}h</span>
-            </div>
-            <div class="field">
-                <span class="field-label">Hores reals</span>
-                <span class="field-value"
-                      style="font-family: var(--mono); color: {{ $projecte->pressupost_hores_reals > $projecte->pressupost_hores_estimades ? 'var(--danger)' : 'var(--success)' }}">
-                {{ $projecte->pressupost_hores_reals }}h
-            </span>
+                <span class="field-label">Hores previstes</span>
+                <span class="field-value" style="font-family: var(--mono);">{{ $projecte->pressupost_hores_previstes }}h</span>
             </div>
             @if($projecte->descripcio)
                 <div class="field" style="grid-column: 1 / -1;">

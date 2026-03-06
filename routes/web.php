@@ -39,7 +39,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/{client}',               [ClientController::class, 'show'])->name('show');
         Route::get('/{client}/edit',          [ClientController::class, 'edit'])->name('edit');
         Route::put('/{client}',               [ClientController::class, 'update'])->name('update');
-        Route::get('/{client}/projectes',     [ClientController::class, 'projectes'])->name('projectes');
     });
 
 });

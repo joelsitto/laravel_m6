@@ -22,8 +22,7 @@
                 <th>Gestor</th>
                 <th>Inici</th>
                 <th>Fi prevista</th>
-                <th>Hores est.</th>
-                <th>Hores reals</th>
+                <th>Hores prev.</th>
                 <th>Accions</th>
             </tr>
             </thead>
@@ -44,19 +43,14 @@
                     <td style="font-size: 13px;">{{ $projecte->gestor->name }}</td>
                     <td style="font-family: var(--mono); font-size: 12px; color: var(--text-muted);">{{ $projecte->data_inici?->format('d/m/Y') ?? '—' }}</td>
                     <td style="font-family: var(--mono); font-size: 12px; color: var(--text-muted);">{{ $projecte->data_fi_prevista?->format('d/m/Y') ?? '—' }}</td>
-                    <td style="font-family: var(--mono); font-size: 12px;">{{ $projecte->pressupost_hores_estimades }}
-                        h
-                    </td>
-                    <td style="font-family: var(--mono); font-size: 12px; color: {{ $projecte->pressupost_hores_reals > $projecte->pressupost_hores_estimades ? 'var(--danger)' : 'var(--success)' }}">
-                        {{ $projecte->pressupost_hores_reals }}h
-                    </td>
+                    <td style="font-family: var(--mono); font-size: 12px;">{{ $projecte->pressupost_hores_previstes }}h</td>
                     <td>
                         <a href="{{ route('projectes.show', $projecte) }}" class="btn btn-ghost btn-sm">Veure</a>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10">
+                        <td colspan="9">
                         <div class="empty">Cap projecte trobat.</div>
                     </td>
                 </tr>

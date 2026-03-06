@@ -36,9 +36,8 @@
                         <select id="client_id" name="client_id" required>
                             <option value="">Selecciona un client</option>
                             @foreach($clients as $client)
-                                <option
-                                    value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
-                                    {{ $client->nombre }} ({{ $client->cif }})
+                                <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
+                                    {{ $client->nombre }} ({{ $client->cif }}){{ !$client->actiu ? ' — INACTIU' : '' }}
                                 </option>
                             @endforeach
                         </select>
@@ -46,6 +45,21 @@
                         <div class="form-error">{{ $message }}</div> @enderror
                     </div>
                 @endif
+
+                {{-- Gestor --}}
+                <div class="form-group">
+                    <label for="gestor_id">Gestor *</label>
+                    <select id="gestor_id" name="gestor_id" required>
+                        <option value="">Selecciona un gestor</option>
+                        @foreach($gestors as $gestor)
+                            <option value="{{ $gestor->id }}" {{ old('gestor_id', $projecte->gestor_id ?? '') == $gestor->id ? 'selected' : '' }}>
+                                {{ $gestor->name }} ({{ $gestor->rol }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('gestor_id')
+                    <div class="form-error">{{ $message }}</div> @enderror
+                </div>
 
                 <div class="form-group {{ isset($projecte) ? '' : '' }}">
                     <label for="nom">Nom del projecte *</label>
@@ -85,11 +99,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="pressupost_hores_estimades">Hores estimades *</label>
-                    <input type="number" id="pressupost_hores_estimades" name="pressupost_hores_estimades"
-                           value="{{ old('pressupost_hores_estimades', $projecte->pressupost_hores_estimades ?? '') }}"
-                           min="1" required placeholder="100">
-                    @error('pressupost_hores_estimades')
+                    <label for="pressupost_hores_previstes">Hores previstes *</label>
+                    <input type="number" id="pressupost_hores_previstes" name="pressupost_hores_previstes"
+                           value="{{ old('pressupost_hores_previstes', $projecte->pressupost_hores_previstes ?? '') }}"
+                           min="1" step="0.01" required placeholder="100">
+                    @error('pressupost_hores_previstes')
                     <div class="form-error">{{ $message }}</div> @enderror
                 </div>
 

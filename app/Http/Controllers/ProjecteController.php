@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Projecte;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProjecteController extends Controller
 {
@@ -18,43 +18,31 @@ class ProjecteController extends Controller
 
     public function create()
     {
-        $clients = Client::where('actiu', true)->get();
+        $clients = Client::all();
+        $gestors = User::whereIn('rol', ['GESTOR', 'ADMIN'])->get();
 
-        return view('projectes.Form', compact('clients'));
+        return view('projectes.Form', compact('clients', 'gestors'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'client_id'                  => 'required|exists:clients,id',
-            'nom'                        => 'required|string|max:255',
-            'descripcio'                 => 'nullable|string',
-            'pressupost_hores_estimades' => 'required|integer|min:1',
-            'data_inici'                 => 'nullable|date',
-            'data_fi_prevista'           => 'nullable|date|after_or_equal:data_inici',
-        ]);
-
-        $client = Client::find($request->client_id);
-        if (!$client->actiu) {
-            return back()->withErrors(['client_id' => 'El client seleccionat no està actiu.']);
-        }
-
         $projecte = Projecte::create([
             'client_id'                  => $request->client_id,
-            'gestor_id'                  => Auth::id(),
+            'gestor_id'                  => $request->gestor_id,
             'nom'                        => $request->nom,
             'descripcio'                 => $request->descripcio,
             'codi_projecte'              => 'TEMP',
             'estat'                      => 'PLANIFICACIO',
             'data_inici'                 => $request->data_inici,
             'data_fi_prevista'           => $request->data_fi_prevista,
-            'pressupost_hores_estimades' => $request->pressupost_hores_estimades,
+            'pressupost_hores_previstes' => $request->pressupost_hores_previstes,
         ]);
 
         $projecte->codi_projecte = 'PROJ-' . now()->year . '-' . str_pad($projecte->id, 3, '0', STR_PAD_LEFT);
         $projecte->save();
 
-        return redirect()->route('projectes.show', $projecte)->with('success', 'Projecte creat correctament.');
+        return redirect()->route('projectes.show', $projecte)
+            ->with('success', 'Projecte creat correctament.');
     }
 
     public function show(Projecte $projecte)
@@ -66,23 +54,19 @@ class ProjecteController extends Controller
 
     public function edit(Projecte $projecte)
     {
-        return view('projectes.Form', compact('projecte'));
+        $gestors = User::whereIn('rol', ['GESTOR', 'ADMIN'])->get();
+
+        return view('projectes.Form', compact('projecte', 'gestors'));
     }
 
     public function update(Request $request, Projecte $projecte)
     {
-        $request->validate([
-            'nom'                        => ['required', 'string', 'max:255'],
-            'descripcio'                 => ['nullable', 'string'],
-            'pressupost_hores_estimades' => ['required', 'integer', 'min:1'],
-            'data_inici'                 => ['nullable', 'date'],
-            'data_fi_prevista'           => ['nullable', 'date', 'after_or_equal:data_inici'],
-        ]);
-
         $projecte->update([
             'nom'                        => $request->nom,
             'descripcio'                 => $request->descripcio,
-            'pressupost_hores_estimades' => $request->pressupost_hores_estimades,
+            'gestor_id'                  => $request->gestor_id,
+            'estat'                      => $request->estat ?? $projecte->estat,
+            'pressupost_hores_previstes' => $request->pressupost_hores_previstes,
             'data_inici'                 => $request->data_inici,
             'data_fi_prevista'           => $request->data_fi_prevista,
         ]);
@@ -93,44 +77,9 @@ class ProjecteController extends Controller
 
     public function canviarEstat(Request $request, Projecte $projecte)
     {
-        $request->validate([
-            'estat' => ['required', 'in:PLANIFICACIO,EN_CURS,PAUSAT,FINALITZAT,CANCELAT'],
-        ]);
-
-        $estatActual = $projecte->estat;
-        $nouEstat    = $request->estat;
-
-        $transicionsValides = [
-            'PLANIFICACIO' => ['EN_CURS', 'CANCELAT'],
-            'EN_CURS'      => ['PAUSAT', 'FINALITZAT', 'CANCELAT'],
-            'PAUSAT'       => ['EN_CURS', 'CANCELAT'],
-            'FINALITZAT'   => [],
-            'CANCELAT'     => [],
-        ];
-
-        if (!in_array($nouEstat, $transicionsValides[$estatActual])) {
-            return redirect()->route('projectes.show', $projecte)
-                ->with('error', "No es pot passar de {$estatActual} a {$nouEstat}.");
-        }
-
-        if ($nouEstat === 'EN_CURS' && !$projecte->data_inici) {
-            return redirect()->route('projectes.show', $projecte)
-                ->with('error', 'Cal definir una data d\'inici abans de posar el projecte EN_CURS.');
-        }
-
-        $dades = ['estat' => $nouEstat];
-
-        if ($nouEstat === 'EN_CURS' && $estatActual === 'PLANIFICACIO') {
-            $dades['data_inici'] = $dades['data_inici'] ?? now()->toDateString();
-        }
-
-        if ($nouEstat === 'FINALITZAT') {
-            $dades['data_fi_real'] = now()->toDateString();
-        }
-
-        $projecte->update($dades);
+        $projecte->update(['estat' => $request->estat]);
 
         return redirect()->route('projectes.show', $projecte)
-            ->with('success', "Estat canviat a {$nouEstat} correctament.");
+            ->with('success', 'Estat canviat correctament.');
     }
 }

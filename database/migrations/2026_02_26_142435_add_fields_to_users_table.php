@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->enum('rol', ['GESTOR', 'DESENVOLUPADOR', 'CLIENT', 'ADMIN'])->default('DESENVOLUPADOR')->after('email');
             $table->decimal('tarifa_hora', 8, 2)->nullable()->after('rol');
+            $table->foreignId('client_id')->nullable()->after('tarifa_hora')->constrained('clients')->nullOnDelete();
         });
     }
 
@@ -23,7 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['rol', 'tarifa_hora']);
+            $table->dropForeign(['client_id']);
+            $table->dropColumn(['rol', 'tarifa_hora', 'client_id']);
         });
     }
 };

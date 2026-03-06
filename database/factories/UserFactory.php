@@ -24,21 +24,52 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name'              => fake()->name(),
+            'email'             => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'password'          => static::$password ??= Hash::make('password'),
+            'remember_token'    => Str::random(10),
+            'rol'               => 'DESENVOLUPADOR',
+            'tarifa_hora'       => fake()->randomFloat(2, 15, 60),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol'         => 'ADMIN',
+            'tarifa_hora' => null,
+        ]);
+    }
+
+    public function gestor(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol'         => 'GESTOR',
+            'tarifa_hora' => fake()->randomFloat(2, 30, 60),
+        ]);
+    }
+
+    public function desenvolupador(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol'         => 'DESENVOLUPADOR',
+            'tarifa_hora' => fake()->randomFloat(2, 15, 45),
+        ]);
+    }
+
+    public function client(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol'         => 'CLIENT',
+            'tarifa_hora' => null,
         ]);
     }
 }

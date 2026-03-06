@@ -21,9 +21,7 @@ return new class extends Migration
             $table->enum('estat', ['PLANIFICACIO', 'EN_CURS', 'PAUSAT', 'FINALITZAT', 'CANCELAT'])->default('PLANIFICACIO');
             $table->date('data_inici')->nullable();
             $table->date('data_fi_prevista')->nullable();
-            $table->date('data_fi_real')->nullable();
-            $table->unsignedInteger('pressupost_hores_estimades');
-            $table->decimal('pressupost_hores_reals', 10, 2)->default(0);
+            $table->decimal('pressupost_hores_previstes', 10, 2);
             $table->timestamps();
         });
     }

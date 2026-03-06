@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'password',
         'rol',
         'tarifa_hora',
+        'client_id',
     ];
 
     /**
@@ -53,13 +55,16 @@ class User extends Authenticatable
     }
 
 
-    // Un gestor pot gestionar molts projectes
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
+
     public function projectesGestionats(): HasMany
     {
         return $this->hasMany(Projecte::class, 'gestor_id');
     }
 
-    // Un desenvolupador pot estar a molts projectes (N:N)
     public function projectes(): BelongsToMany
     {
         return $this->belongsToMany(Projecte::class, 'project_user');

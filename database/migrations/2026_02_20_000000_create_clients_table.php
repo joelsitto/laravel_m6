@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('cif')->unique();
-            $table->string('email_contacte');
+            $table->string('email_contacte')->nullable();
             $table->string('telefon')->nullable();
             $table->text('direccio')->nullable();
             $table->boolean('actiu')->default(true);
