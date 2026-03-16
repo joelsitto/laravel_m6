@@ -20,10 +20,10 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="nombre">Nom de l'empresa *</label>
-                    <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $client->nombre ?? '') }}"
+                    <label for="nom">Nom de l'empresa *</label>
+                    <input type="text" id="nom" name="nom" value="{{ old('nom', $client->nom ?? '') }}"
                            required>
-                    @error('nombre')
+                    @error('nom')
                     <div class="form-error">{{ $message }}</div> @enderror
                 </div>
 

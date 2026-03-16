@@ -10,6 +10,7 @@
         </div>
         <div class="btn-group">
             <a href="{{ route('projectes.index') }}" class="btn btn-ghost">← Tornar</a>
+            <a href="{{ route('projectes.tickets.index', $projecte) }}" class="btn btn-ghost">Tickets</a>
             @if(!in_array($projecte->estat, ['FINALITZAT','CANCELAT']))
                 <a href="{{ route('projectes.edit', $projecte) }}" class="btn btn-ghost">Editar</a>
             @endif
@@ -36,7 +37,7 @@
                 <span class="field-value">
                 <a href="{{ route('clients.show', $projecte->client) }}"
                    style="color: var(--text); text-decoration: none;">
-                    {{ $projecte->client->nombre }}
+                    {{ $projecte->client->nom }}
                 </a>
                 <div
                     style="font-size: 12px; color: var(--text-muted); font-family: var(--mono);">{{ $projecte->client->cif }}</div>

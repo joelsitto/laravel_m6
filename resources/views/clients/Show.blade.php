@@ -1,11 +1,11 @@
 @extends('layouts.erp')
 
-@section('title', $client->nombre)
+@section('title', $client->nom)
 
 @section('content')
     <div class="page-header">
         <div>
-            <div class="page-title">{{ $client->nombre }}</div>
+            <div class="page-title">{{ $client->nom }}</div>
             <div class="page-subtitle">{{ $client->cif }}</div>
         </div>
         <div class="btn-group">
@@ -13,7 +13,7 @@
             <a href="{{ route('clients.edit', $client) }}" class="btn btn-ghost">Editar</a>
             <form action="{{ route('clients.update', $client) }}" method="POST" style="display:inline;">
                 @csrf @method('PUT')
-                <input type="hidden" name="nombre" value="{{ $client->nombre }}">
+                <input type="hidden" name="nom" value="{{ $client->nom }}">
                 <input type="hidden" name="cif" value="{{ $client->cif }}">
                 <input type="hidden" name="email_contacte" value="{{ $client->email_contacte }}">
                 <input type="hidden" name="actiu" value="{{ $client->actiu ? 0 : 1 }}">
@@ -29,7 +29,7 @@
         <div class="field-grid">
             <div class="field">
                 <span class="field-label">Nom</span>
-                <span class="field-value">{{ $client->nombre }}</span>
+                <span class="field-value">{{ $client->nom }}</span>
             </div>
             <div class="field">
                 <span class="field-label">CIF</span>
@@ -96,3 +96,6 @@
             </tbody>
         </table>
     </div>
+
+@endsection
+

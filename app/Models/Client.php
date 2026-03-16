@@ -10,7 +10,7 @@ class Client extends Model
 {
     use HasFactory;
     protected $table = 'clients';
-    protected $fillable = ['nombre', 'cif', 'email_contacte', 'telefon', 'direccio', 'actiu'];
+    protected $fillable = ['nom', 'cif', 'email_contacte', 'telefon', 'direccio', 'actiu'];
     protected $casts = [
         'actiu' => 'boolean',
     ];

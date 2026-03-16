@@ -67,6 +67,8 @@ class DatabaseSeeder extends Seeder
                         'estat'     => $estat,
                     ]);
 
+                $projecte->configuracio()->create();
+
                 // Assignar 1–3 devs aleatoris al projecte
                 $projecte->desenvolupadors()->attach(
                     $devs->random(rand(1, min(3, $devs->count())))->pluck('id')

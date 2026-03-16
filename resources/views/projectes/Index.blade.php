@@ -36,7 +36,7 @@
                         </a>
                     </td>
                     <td style="font-weight: 500;">{{ $projecte->nom }}</td>
-                    <td style="font-size: 13px; color: var(--text-muted);">{{ $projecte->client->nombre }}</td>
+                    <td style="font-size: 13px; color: var(--text-muted);">{{ $projecte->client->nom }}</td>
                     <td>
                         <span class="badge badge-{{ strtolower($projecte->estat) }}">{{ $projecte->estat }}</span>
                     </td>

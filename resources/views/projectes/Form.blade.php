@@ -37,7 +37,7 @@
                             <option value="">Selecciona un client</option>
                             @foreach($clients as $client)
                                 <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
-                                    {{ $client->nombre }} ({{ $client->cif }}){{ !$client->actiu ? ' — INACTIU' : '' }}
+                                    {{ $client->nom }} ({{ $client->cif }}){{ !$client->actiu ? ' — INACTIU' : '' }}
                                 </option>
                             @endforeach
                         </select>
@@ -79,6 +79,8 @@
                                 </option>
                             @endforeach
                         </select>
+                        @error('estat')
+                        <div class="form-error">{{ $message }}</div> @enderror
                     </div>
                 @endif
 

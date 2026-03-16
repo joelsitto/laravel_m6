@@ -28,7 +28,7 @@
             @forelse($clients as $client)
                 <tr>
                     <td><a href="{{ route('clients.show', $client) }}"
-                           style="color: var(--text); text-decoration: none; font-weight: 500;">{{ $client->nombre }}</a>
+                           style="color: var(--text); text-decoration: none; font-weight: 500;">{{ $client->nom }}</a>
                     </td>
                     <td style="font-family: var(--mono); font-size: 12px; color: var(--text-muted);">{{ $client->cif }}</td>
                     <td style="font-size: 13px;">{{ $client->email_contacte }}</td>

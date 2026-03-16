@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjecteRequest;
+use App\Http\Requests\UpdateProjecteRequest;
 use App\Models\Client;
 use App\Models\Projecte;
 use App\Models\User;
@@ -24,25 +26,29 @@ class ProjecteController extends Controller
         return view('projectes.Form', compact('clients', 'gestors'));
     }
 
-    public function store(Request $request)
+    public function store(StoreProjecteRequest $request)
     {
+        $validated = $request->validated();
+
         $projecte = Projecte::create([
-            'client_id'                  => $request->client_id,
-            'gestor_id'                  => $request->gestor_id,
-            'nom'                        => $request->nom,
-            'descripcio'                 => $request->descripcio,
+            'client_id'                  => $validated['client_id'],
+            'gestor_id'                  => $validated['gestor_id'],
+            'nom'                        => $validated['nom'],
+            'descripcio'                 => $validated['descripcio'] ?? null,
             'codi_projecte'              => 'TEMP',
             'estat'                      => 'PLANIFICACIO',
-            'data_inici'                 => $request->data_inici,
-            'data_fi_prevista'           => $request->data_fi_prevista,
-            'pressupost_hores_previstes' => $request->pressupost_hores_previstes,
+            'data_inici'                 => $validated['data_inici'] ?? null,
+            'data_fi_prevista'           => $validated['data_fi_prevista'] ?? null,
+            'pressupost_hores_previstes' => $validated['pressupost_hores_previstes'],
         ]);
 
         $projecte->codi_projecte = 'PROJ-' . now()->year . '-' . str_pad($projecte->id, 3, '0', STR_PAD_LEFT);
         $projecte->save();
 
+        $projecte->configuracio()->create();
+
         return redirect()->route('projectes.show', $projecte)
-            ->with('success', 'Projecte creat correctament.');
+            ->with('success', 'Creat');
     }
 
     public function show(Projecte $projecte)
@@ -59,20 +65,22 @@ class ProjecteController extends Controller
         return view('projectes.Form', compact('projecte', 'gestors'));
     }
 
-    public function update(Request $request, Projecte $projecte)
+    public function update(UpdateProjecteRequest $request, Projecte $projecte)
     {
+        $validated = $request->validated();
+
         $projecte->update([
-            'nom'                        => $request->nom,
-            'descripcio'                 => $request->descripcio,
-            'gestor_id'                  => $request->gestor_id,
-            'estat'                      => $request->estat ?? $projecte->estat,
-            'pressupost_hores_previstes' => $request->pressupost_hores_previstes,
-            'data_inici'                 => $request->data_inici,
-            'data_fi_prevista'           => $request->data_fi_prevista,
+            'nom'                        => $validated['nom'],
+            'descripcio'                 => $validated['descripcio'] ?? null,
+            'gestor_id'                  => $validated['gestor_id'],
+            'estat'                      => $validated['estat'] ?? $projecte->estat,
+            'pressupost_hores_previstes' => $validated['pressupost_hores_previstes'],
+            'data_inici'                 => $validated['data_inici'] ?? null,
+            'data_fi_prevista'           => $validated['data_fi_prevista'] ?? null,
         ]);
 
         return redirect()->route('projectes.show', $projecte)
-            ->with('success', 'Projecte actualitzat correctament.');
+            ->with('success', 'Actualitzat');
     }
 
     public function canviarEstat(Request $request, Projecte $projecte)

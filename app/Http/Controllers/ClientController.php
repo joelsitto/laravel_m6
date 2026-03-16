@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
-use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -19,14 +20,12 @@ class ClientController extends Controller
         return view('clients.Form');
     }
 
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
-        Client::create($request->only([
-            'nombre', 'cif', 'email_contacte', 'telefon', 'direccio'
-        ]));
+        Client::create($request->validated());
 
         return redirect()->route('clients.index')
-            ->with('success', 'Client creat correctament.');
+            ->with('success', 'Creat');
     }
 
     public function show(Client $client)
@@ -41,19 +40,21 @@ class ClientController extends Controller
         return view('clients.Form', compact('client'));
     }
 
-    public function update(Request $request, Client $client)
+    public function update(UpdateClientRequest $request, Client $client)
     {
+        $validated = $request->validated();
+
         $client->update([
-            'nombre'         => $request->nombre,
-            'cif'            => $request->cif,
-            'email_contacte' => $request->email_contacte,
-            'telefon'        => $request->telefon,
-            'direccio'       => $request->direccio,
-            'actiu'          => (bool) $request->input('actiu', $client->actiu),
+            'nom'            => $validated['nom'],
+            'cif'            => $validated['cif'],
+            'email_contacte' => $validated['email_contacte'] ?? $client->email_contacte,
+            'telefon'        => $validated['telefon'] ?? $client->telefon,
+            'direccio'       => $validated['direccio'] ?? $client->direccio,
+            'actiu'          => (bool) ($validated['actiu'] ?? $client->actiu),
         ]);
 
         return redirect()->route('clients.show', $client)
-            ->with('success', 'Client actualitzat correctament.');
+            ->with('success', 'Actualitzat');
     }
 
 }

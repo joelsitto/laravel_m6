@@ -12,7 +12,7 @@ class ClientFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre'         => fake()->company(),
+            'nom'            => fake()->company(),
             'cif'            => strtoupper(fake()->bothify('?########')),
             'email_contacte' => fake()->unique()->companyEmail(),
             'telefon'        => fake()->phoneNumber(),
