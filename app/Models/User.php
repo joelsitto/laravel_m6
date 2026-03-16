@@ -69,4 +69,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Projecte::class, 'project_user');
     }
+
+    public function ticketsCreats(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'creador_id');
+    }
+
+    public function comentaris(): HasMany
+    {
+        return $this->hasMany(Comentari::class, 'autor_id');
+    }
 }

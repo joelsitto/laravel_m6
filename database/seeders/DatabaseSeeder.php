@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Client;
+use App\Models\Comentari;
 use App\Models\Projecte;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -53,6 +55,9 @@ class DatabaseSeeder extends Seeder
             ['client' => $clientInactiu, 'estats' => ['CANCELAT', 'FINALITZAT']],
         ];
 
+        // Pool d'usuaris reals per a creadors de tickets i autors de comentaris
+        $totsElsUsuaris = User::all();
+
         foreach ($distribucio as $grup) {
             foreach ($grup['estats'] as $estat) {
                 $projecte = Projecte::factory()
@@ -66,6 +71,22 @@ class DatabaseSeeder extends Seeder
                 $projecte->desenvolupadors()->attach(
                     $devs->random(rand(1, min(3, $devs->count())))->pluck('id')
                 );
+
+                // ── 5. Tickets (2–3 per projecte) ─────────────────────────
+                $numTickets = rand(2, 3);
+                for ($t = 0; $t < $numTickets; $t++) {
+                    $ticket = Ticket::factory()
+                        ->withCreador($totsElsUsuaris->random())
+                        ->create(['projecte_id' => $projecte->id]);
+
+                    // ── 6. Comentaris (0–4 per ticket) ────────────────────
+                    $numComentaris = rand(0, 4);
+                    for ($c = 0; $c < $numComentaris; $c++) {
+                        Comentari::factory()
+                            ->withAutor($totsElsUsuaris->random())
+                            ->create(['ticket_id' => $ticket->id]);
+                    }
+                }
             }
         }
     }

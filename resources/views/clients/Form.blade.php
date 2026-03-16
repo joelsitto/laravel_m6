@@ -62,9 +62,12 @@
                     <div class="form-group">
                         <label for="actiu">Estat</label>
                         <select id="actiu" name="actiu">
-                            <option value="1" {{ old('actiu', $client->actiu) ? 'selected' : '' }}>Actiu</option>
-                            <option value="0" {{ !old('actiu', $client->actiu) ? 'selected' : '' }}>Inactiu</option>
+                            <option value="1" {{ old('actiu', $client->actiu ? '1' : '0') === '1' ? 'selected' : '' }}>Actiu</option>
+                            <option value="0" {{ old('actiu', $client->actiu ? '1' : '0') === '0' ? 'selected' : '' }}>Inactiu</option>
                         </select>
+                        @error('actiu')
+                            <div class="form-error">{{ $message }}</div>
+                        @enderror
                     </div>
                 @endif
             </div>

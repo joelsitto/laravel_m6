@@ -125,10 +125,20 @@
 
 <div class="container">
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success">✓ {{ session('success') }}</div>
     @endif
     @if(session('error'))
-        <div class="alert alert-error">{{ session('error') }}</div>
+        <div class="alert alert-error">✗ {{ session('error') }}</div>
+    @endif
+    @if($errors->any())
+        <div class="alert alert-error">
+            <strong>Revisa els errors del formulari:</strong>
+            <ul style="margin: 0.4rem 0 0 1rem; padding: 0;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     @yield('content')
