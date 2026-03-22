@@ -11,9 +11,11 @@
         <div class="btn-group">
             <a href="{{ route('projectes.index') }}" class="btn btn-ghost">← Tornar</a>
             <a href="{{ route('projectes.tickets.index', $projecte) }}" class="btn btn-ghost">Tickets</a>
-            @if(!in_array($projecte->estat, ['FINALITZAT','CANCELAT']))
-                <a href="{{ route('projectes.edit', $projecte) }}" class="btn btn-ghost">Editar</a>
-            @endif
+            @can('update', $projecte)
+                @if(!in_array($projecte->estat, ['FINALITZAT','CANCELAT']))
+                    <a href="{{ route('projectes.edit', $projecte) }}" class="btn btn-ghost">Editar</a>
+                @endif
+            @endcan
         </div>
     </div>
 
@@ -35,10 +37,14 @@
             <div class="field">
                 <span class="field-label">Client</span>
                 <span class="field-value">
-                <a href="{{ route('clients.show', $projecte->client) }}"
-                   style="color: var(--text); text-decoration: none;">
+                @can('view', $projecte->client)
+                    <a href="{{ route('clients.show', $projecte->client) }}"
+                       style="color: var(--text); text-decoration: none;">
+                        {{ $projecte->client->nom }}
+                    </a>
+                @else
                     {{ $projecte->client->nom }}
-                </a>
+                @endcan
                 <div
                     style="font-size: 12px; color: var(--text-muted); font-family: var(--mono);">{{ $projecte->client->cif }}</div>
             </span>
@@ -83,6 +89,7 @@
         $possibles = $transicions[$projecte->estat] ?? [];
     @endphp
 
+    @can('update', $projecte)
     @if(count($possibles) > 0)
         <div class="card">
             <div class="card-title">Canviar estat</div>
@@ -100,6 +107,7 @@
             </div>
         </div>
     @endif
+    @endcan
 
     {{-- EQUIP --}}
     @if($projecte->desenvolupadors->count() > 0)

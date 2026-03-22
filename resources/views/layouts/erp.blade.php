@@ -117,10 +117,17 @@
 <nav>
     <a class="nav-brand" href="{{ route('projectes.index') }}">// GESTIÓ_PRO</a>
     <div class="nav-links">
-        <a href="{{ route('projectes.index') }}" class="{{ request()->routeIs('projectes.*') ? 'active' : '' }}">Projectes</a>
-        <a href="{{ route('clients.index') }}"   class="{{ request()->routeIs('clients.*')   ? 'active' : '' }}">Clients</a>
+        @can('viewAny', App\Models\Projecte::class)
+            <a href="{{ route('projectes.index') }}" class="{{ request()->routeIs('projectes.*') ? 'active' : '' }}">Projectes</a>
+        @endcan
+
+        @if(auth()->user()?->hasRole('ADMIN', 'GESTOR'))
+            <a href="{{ route('clients.index') }}" class="{{ request()->routeIs('clients.*') ? 'active' : '' }}">Clients</a>
+        @elseif(auth()->user()?->hasRole('CLIENT') && auth()->user()?->client_id)
+            <a href="{{ route('clients.show', auth()->user()->client_id) }}" class="{{ request()->routeIs('clients.show') ? 'active' : '' }}">El meu client</a>
+        @endif
     </div>
-    <div class="nav-user">{{ Auth::user()->name ?? 'guest' }}</div>
+    <div class="nav-user">{{ Auth::user()->name ?? 'guest' }} @if(auth()->check()) · {{ Auth::user()->rol }} @endif</div>
 </nav>
 
 <div class="container">

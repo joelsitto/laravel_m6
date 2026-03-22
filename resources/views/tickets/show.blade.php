@@ -10,7 +10,9 @@
         </div>
         <div class="btn-group">
             <a href="{{ route('projectes.tickets.index', $projecte) }}" class="btn btn-ghost">← Tornar</a>
-            <a href="{{ route('projectes.tickets.edit', [$projecte, $ticket]) }}" class="btn btn-ghost">Editar</a>
+            @can('update', $ticket)
+                <a href="{{ route('projectes.tickets.edit', [$projecte, $ticket]) }}" class="btn btn-ghost">Editar</a>
+            @endcan
         </div>
     </div>
 
@@ -37,26 +39,28 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-title">Nou comentari</div>
-        <form action="{{ route('tickets.comentaris.store', $ticket) }}" method="POST">
-            @csrf
-            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-            <div class="form-group">
-                <label for="text">Text *</label>
-                <textarea id="text" name="text" rows="3" required>{{ old('text') }}</textarea>
-                @error('text')
-                <div class="form-error">{{ $message }}</div>
+    @can('create', [App\Models\Comentari::class, $ticket])
+        <div class="card">
+            <div class="card-title">Nou comentari</div>
+            <form action="{{ route('tickets.comentaris.store', $ticket) }}" method="POST">
+                @csrf
+                <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                <div class="form-group">
+                    <label for="text">Text *</label>
+                    <textarea id="text" name="text" rows="3" required>{{ old('text') }}</textarea>
+                    @error('text')
+                    <div class="form-error">{{ $message }}</div>
+                    @enderror
+                </div>
+                @error('ticket_id')
+                <div class="form-error" style="margin-top: 0.5rem;">{{ $message }}</div>
                 @enderror
-            </div>
-            @error('ticket_id')
-            <div class="form-error" style="margin-top: 0.5rem;">{{ $message }}</div>
-            @enderror
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Afegir comentari</button>
-            </div>
-        </form>
-    </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Afegir comentari</button>
+                </div>
+            </form>
+        </div>
+    @endcan
 
     <div class="card">
         <div class="card-title">Comentaris ({{ $ticket->comentaris->count() }})</div>
@@ -66,11 +70,13 @@
                     <div style="font-size: 12px; color: var(--text-muted);">
                         {{ $comentari->autor->name }} · {{ $comentari->created_at->format('d/m/Y H:i') }}
                     </div>
-                    <form action="{{ route('comentaris.destroy', $comentari) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-ghost btn-sm">Eliminar</button>
-                    </form>
+                    @can('delete', $comentari)
+                        <form action="{{ route('comentaris.destroy', $comentari) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-ghost btn-sm">Eliminar</button>
+                        </form>
+                    @endcan
                 </div>
                 <div style="margin-top: 0.45rem;">{{ $comentari->text }}</div>
             </div>

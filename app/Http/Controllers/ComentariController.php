@@ -10,6 +10,8 @@ class ComentariController extends Controller
 {
     public function store(StoreComentariRequest $request, Ticket $ticket)
     {
+        $this->authorize('create', [Comentari::class, $ticket]);
+
         $validated = $request->validated();
 
         if ((int) $validated['ticket_id'] !== $ticket->id) {
@@ -28,6 +30,8 @@ class ComentariController extends Controller
 
     public function destroy(Comentari $comentari)
     {
+        $this->authorize('delete', $comentari);
+
         $ticket = $comentari->ticket;
         $projecteId = $ticket->projecte_id;
 

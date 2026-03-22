@@ -10,7 +10,9 @@
         </div>
         <div class="btn-group">
             <a href="{{ route('projectes.show', $projecte) }}" class="btn btn-ghost">← Tornar al projecte</a>
-            <a href="{{ route('projectes.tickets.create', $projecte) }}" class="btn btn-primary">+ Nou Ticket</a>
+            @can('create', [App\Models\Ticket::class, $projecte])
+                <a href="{{ route('projectes.tickets.create', $projecte) }}" class="btn btn-primary">+ Nou Ticket</a>
+            @endcan
         </div>
     </div>
 

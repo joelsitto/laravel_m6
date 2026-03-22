@@ -3,6 +3,7 @@
 @section('title', 'Nou Ticket')
 
 @section('content')
+    @can('create', [App\Models\Ticket::class, $projecte])
     <div class="page-header">
         <div>
             <div class="page-title">Nou Ticket</div>
@@ -55,5 +56,6 @@
             </div>
         </form>
     </div>
+    @endcan
 @endsection
 

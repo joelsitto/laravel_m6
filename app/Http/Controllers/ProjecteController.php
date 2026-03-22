@@ -13,13 +13,32 @@ class ProjecteController extends Controller
 {
     public function index()
     {
-        $projectes = Projecte::with(['client', 'gestor'])->paginate(15);
+        $this->authorize('viewAny', Projecte::class);
+
+        $user = auth()->user();
+
+        $query = Projecte::query()->with(['client', 'gestor']);
+
+        if ($user->hasRole('CLIENT')) {
+            $query->where('client_id', $user->client_id);
+        } elseif ($user->hasRole('DEV')) {
+            $idsProjectesDev = [];
+            foreach ($user->projectes as $projecteDev) {
+                $idsProjectesDev[] = $projecteDev->id;
+            }
+
+            $query->whereIn('id', $idsProjectesDev);
+        }
+
+        $projectes = $query->paginate(15);
 
         return view('projectes.index', compact('projectes'));
     }
 
     public function create()
     {
+        $this->authorize('create', Projecte::class);
+
         $clients = Client::all();
         $gestors = User::whereIn('rol', ['GESTOR', 'ADMIN'])->get();
 
@@ -28,6 +47,8 @@ class ProjecteController extends Controller
 
     public function store(StoreProjecteRequest $request)
     {
+        $this->authorize('create', Projecte::class);
+
         $validated = $request->validated();
 
         $projecte = Projecte::create([
@@ -53,6 +74,8 @@ class ProjecteController extends Controller
 
     public function show(Projecte $projecte)
     {
+        $this->authorize('view', $projecte);
+
         $projecte->load(['client', 'gestor', 'desenvolupadors']);
 
         return view('projectes.show', compact('projecte'));
@@ -60,6 +83,8 @@ class ProjecteController extends Controller
 
     public function edit(Projecte $projecte)
     {
+        $this->authorize('update', $projecte);
+
         $gestors = User::whereIn('rol', ['GESTOR', 'ADMIN'])->get();
 
         return view('projectes.Form', compact('projecte', 'gestors'));
@@ -67,6 +92,8 @@ class ProjecteController extends Controller
 
     public function update(UpdateProjecteRequest $request, Projecte $projecte)
     {
+        $this->authorize('update', $projecte);
+
         $validated = $request->validated();
 
         $projecte->update([
@@ -85,6 +112,8 @@ class ProjecteController extends Controller
 
     public function canviarEstat(Request $request, Projecte $projecte)
     {
+        $this->authorize('update', $projecte);
+
         $projecte->update(['estat' => $request->estat]);
 
         return redirect()->route('projectes.show', $projecte)

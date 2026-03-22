@@ -79,4 +79,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comentari::class, 'autor_id');
     }
+
+    public function hasRole(string ...$roles): bool
+    {
+        $currentRole = strtoupper(trim((string) $this->rol));
+
+        foreach ($roles as $role) {
+            $role = strtoupper(trim($role));
+            if ($role === 'DEV') {
+                $role = 'DESENVOLUPADOR';
+            }
+
+            if ($currentRole === $role) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

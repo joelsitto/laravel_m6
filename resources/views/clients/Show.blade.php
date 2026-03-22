@@ -9,18 +9,25 @@
             <div class="page-subtitle">{{ $client->cif }}</div>
         </div>
         <div class="btn-group">
-            <a href="{{ route('clients.index') }}" class="btn btn-ghost">← Tornar</a>
-            <a href="{{ route('clients.edit', $client) }}" class="btn btn-ghost">Editar</a>
-            <form action="{{ route('clients.update', $client) }}" method="POST" style="display:inline;">
-                @csrf @method('PUT')
-                <input type="hidden" name="nom" value="{{ $client->nom }}">
-                <input type="hidden" name="cif" value="{{ $client->cif }}">
-                <input type="hidden" name="email_contacte" value="{{ $client->email_contacte }}">
-                <input type="hidden" name="actiu" value="{{ $client->actiu ? 0 : 1 }}">
-                <button type="submit" class="btn {{ $client->actiu ? 'btn-danger' : 'btn-ghost' }} btn-sm">
-                    {{ $client->actiu ? 'Desactivar' : 'Activar' }}
-                </button>
-            </form>
+            @can('viewAny', App\Models\Client::class)
+                <a href="{{ route('clients.index') }}" class="btn btn-ghost">← Tornar</a>
+            @else
+                <a href="{{ route('projectes.index') }}" class="btn btn-ghost">← Tornar</a>
+            @endcan
+
+            @can('update', $client)
+                <a href="{{ route('clients.edit', $client) }}" class="btn btn-ghost">Editar</a>
+                <form action="{{ route('clients.update', $client) }}" method="POST" style="display:inline;">
+                    @csrf @method('PUT')
+                    <input type="hidden" name="nom" value="{{ $client->nom }}">
+                    <input type="hidden" name="cif" value="{{ $client->cif }}">
+                    <input type="hidden" name="email_contacte" value="{{ $client->email_contacte }}">
+                    <input type="hidden" name="actiu" value="{{ $client->actiu ? 0 : 1 }}">
+                    <button type="submit" class="btn {{ $client->actiu ? 'btn-danger' : 'btn-ghost' }} btn-sm">
+                        {{ $client->actiu ? 'Desactivar' : 'Activar' }}
+                    </button>
+                </form>
+            @endcan
         </div>
     </div>
 

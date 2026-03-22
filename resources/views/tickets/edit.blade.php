@@ -3,6 +3,7 @@
 @section('title', 'Editar Ticket')
 
 @section('content')
+    @can('update', $ticket)
     <div class="page-header">
         <div>
             <div class="page-title">Editar Ticket</div>
@@ -51,5 +52,6 @@
             </div>
         </form>
     </div>
+    @endcan
 @endsection
 

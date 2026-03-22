@@ -8,7 +8,9 @@
             <div class="page-title">Clients</div>
             <div class="page-subtitle">{{ $clients->total() }} registres</div>
         </div>
-        <a href="{{ route('clients.create') }}" class="btn btn-primary">+ Crear Client</a>
+        @can('create', App\Models\Client::class)
+            <a href="{{ route('clients.create') }}" class="btn btn-primary">+ Crear Client</a>
+        @endcan
     </div>
 
     <div class="table-wrap">
@@ -44,7 +46,9 @@
                     <td>
                         <div class="btn-group">
                             <a href="{{ route('clients.show', $client) }}" class="btn btn-ghost btn-sm">Veure</a>
-                            <a href="{{ route('clients.edit', $client) }}" class="btn btn-ghost btn-sm">Editar</a>
+                            @can('update', $client)
+                                <a href="{{ route('clients.edit', $client) }}" class="btn btn-ghost btn-sm">Editar</a>
+                            @endcan
                         </div>
                     </td>
                 </tr>

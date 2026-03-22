@@ -11,6 +11,9 @@ class TicketController extends Controller
 {
     public function index(Projecte $projecte)
     {
+        $this->authorize('viewAny', Ticket::class);
+        $this->authorize('view', $projecte);
+
         $tickets = $projecte->tickets()
             ->with(['creador'])
             ->withCount('comentaris')
@@ -22,12 +25,20 @@ class TicketController extends Controller
 
     public function create(Projecte $projecte)
     {
+        $this->authorize('create', [Ticket::class, $projecte]);
+
         return view('tickets.create', compact('projecte'));
     }
 
     public function store(StoreTicketRequest $request, Projecte $projecte)
     {
+        $this->authorize('create', [Ticket::class, $projecte]);
+
         $validated = $request->validated();
+
+        if ((int) $validated['projecte_id'] !== $projecte->id) {
+            abort(404);
+        }
 
         $ticket = Ticket::create([
             'projecte_id' => $projecte->id,
@@ -49,6 +60,7 @@ class TicketController extends Controller
     public function show(Projecte $projecte, Ticket $ticket)
     {
         $this->assertTicketBelongsToProjecte($projecte, $ticket);
+        $this->authorize('view', $ticket);
 
         $ticket->load(['creador', 'comentaris.autor']);
 
@@ -58,6 +70,7 @@ class TicketController extends Controller
     public function edit(Projecte $projecte, Ticket $ticket)
     {
         $this->assertTicketBelongsToProjecte($projecte, $ticket);
+        $this->authorize('update', $ticket);
 
         return view('tickets.edit', compact('projecte', 'ticket'));
     }
@@ -65,6 +78,7 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Projecte $projecte, Ticket $ticket)
     {
         $this->assertTicketBelongsToProjecte($projecte, $ticket);
+        $this->authorize('update', $ticket);
 
         $validated = $request->validated();
 

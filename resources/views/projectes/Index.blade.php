@@ -8,7 +8,9 @@
             <div class="page-title">Projectes</div>
             <div class="page-subtitle">{{ $projectes->total() }} registres</div>
         </div>
-        <a href="{{ route('projectes.create') }}" class="btn btn-primary">+ Nou Projecte</a>
+        @can('create', App\Models\Projecte::class)
+            <a href="{{ route('projectes.create') }}" class="btn btn-primary">+ Nou Projecte</a>
+        @endcan
     </div>
 
     <div class="table-wrap">
