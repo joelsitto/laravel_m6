@@ -26,16 +26,20 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="estat">Estat</label>
-                    <select id="estat" name="estat">
-                        @foreach(['NOU', 'OBERT', 'TANCAT'] as $estat)
-                            <option value="{{ $estat }}" {{ old('estat', 'NOU') === $estat ? 'selected' : '' }}>{{ $estat }}</option>
+                    <label for="ticket_pare_id">Ticket pare (opcional)</label>
+                    <select id="ticket_pare_id" name="ticket_pare_id">
+                        <option value="">Sense pare</option>
+                        @foreach($ticketsPareDisponibles as $ticketPare)
+                            <option value="{{ $ticketPare->id }}" {{ (string) old('ticket_pare_id') === (string) $ticketPare->id ? 'selected' : '' }}>
+                                {{ $ticketPare->codi_ticket }} - {{ $ticketPare->titol }}
+                            </option>
                         @endforeach
                     </select>
-                    @error('estat')
+                    @error('ticket_pare_id')
                     <div class="form-error">{{ $message }}</div>
                     @enderror
                 </div>
+
 
                 <div class="form-group full">
                     <label for="descripcio">Descripcio</label>

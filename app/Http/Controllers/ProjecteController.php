@@ -78,7 +78,17 @@ class ProjecteController extends Controller
 
         $projecte->load(['client', 'gestor', 'desenvolupadors']);
 
-        return view('projectes.show', compact('projecte'));
+        $ticketsAmbHores = $projecte->tickets()
+            ->with(['assignat'])
+            ->withSum('registresTemps', 'hores')
+            ->orderBy('id')
+            ->get();
+
+        $totalHoresProjecte = (float) $ticketsAmbHores->sum(function ($ticket) {
+            return (float) ($ticket->registres_temps_sum_hores ?? 0);
+        });
+
+        return view('projectes.show', compact('projecte', 'ticketsAmbHores', 'totalHoresProjecte'));
     }
 
     public function edit(Projecte $projecte)

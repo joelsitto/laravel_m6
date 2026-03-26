@@ -54,7 +54,6 @@ class User extends Authenticatable
         ];
     }
 
-
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
@@ -67,7 +66,7 @@ class User extends Authenticatable
 
     public function projectes(): BelongsToMany
     {
-        return $this->belongsToMany(Projecte::class, 'project_user');
+        return $this->belongsToMany(Projecte::class, 'project_user', 'user_id', 'project_id');
     }
 
     public function ticketsCreats(): HasMany
@@ -75,9 +74,19 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, 'creador_id');
     }
 
+    public function ticketsAssignats(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assignat_a');
+    }
+
     public function comentaris(): HasMany
     {
         return $this->hasMany(Comentari::class, 'autor_id');
+    }
+
+    public function registresTemps(): HasMany
+    {
+        return $this->hasMany(RegistreTemps::class);
     }
 
     public function hasRole(string ...$roles): bool

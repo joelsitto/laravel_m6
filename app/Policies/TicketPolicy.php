@@ -66,5 +66,22 @@ class TicketPolicy
     {
         return $user->hasRole('ADMIN', 'GESTOR');
     }
-}
 
+    public function assignar(User $user, Ticket $ticket): bool
+    {
+        return $user->hasRole('ADMIN', 'GESTOR');
+    }
+
+    public function canviarEstat(User $user, Ticket $ticket): bool
+    {
+        if ($user->hasRole('ADMIN', 'GESTOR')) {
+            return true;
+        }
+
+        if ($user->hasRole('DEV')) {
+            return (int) $ticket->assignat_a === (int) $user->id;
+        }
+
+        return false;
+    }
+}

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('codi_ticket')->unique();
             $table->string('titol');
             $table->text('descripcio')->nullable();
-            $table->enum('estat', ['NOU', 'OBERT', 'TANCAT'])->default('NOU');
+            $table->enum('estat', ['NOU', 'ASSIGNAT', 'EN_PROGRES', 'EN_REVISIO', 'TANCAT'])->default('NOU');
             $table->timestamps();
         });
     }

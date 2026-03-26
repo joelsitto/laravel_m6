@@ -12,6 +12,7 @@
             <a href="{{ route('projectes.index') }}" class="btn btn-ghost">← Tornar</a>
             <a href="{{ route('projectes.tickets.index', $projecte) }}" class="btn btn-ghost">Tickets</a>
             @can('update', $projecte)
+                <a href="{{ route('projectes.equip.index', $projecte) }}" class="btn btn-ghost">Equip</a>
                 @if(!in_array($projecte->estat, ['FINALITZAT','CANCELAT']))
                     <a href="{{ route('projectes.edit', $projecte) }}" class="btn btn-ghost">Editar</a>
                 @endif
@@ -121,4 +122,44 @@
             </div>
         </div>
     @endif
+
+    <div class="card">
+        <div class="card-title">Hores registrades</div>
+        <div style="margin-bottom: 1rem; font-weight: 600;">
+            Total projecte: {{ number_format((float) $totalHoresProjecte, 2) }} h
+        </div>
+
+        <div class="table-wrap" style="margin: 0; border-radius: 4px;">
+            <table>
+                <thead>
+                <tr>
+                    <th>Ticket</th>
+                    <th>Titol</th>
+                    <th>Assignat</th>
+                    <th>Hores</th>
+                </tr>
+                </thead>
+                <tbody>
+                @forelse($ticketsAmbHores as $ticket)
+                    <tr>
+                        <td>
+                            <a href="{{ route('projectes.tickets.show', [$projecte, $ticket]) }}" style="color: var(--text); text-decoration: none;">
+                                {{ $ticket->codi_ticket }}
+                            </a>
+                        </td>
+                        <td>{{ $ticket->titol }}</td>
+                        <td>{{ $ticket->assignat?->name ?? 'Sense assignar' }}</td>
+                        <td style="font-family: var(--mono);">{{ number_format((float) ($ticket->registres_temps_sum_hores ?? 0), 2) }} h</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty" style="padding: 1rem;">No hi ha tickets en aquest projecte.</div>
+                        </td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection

@@ -21,7 +21,7 @@ class TicketFactory extends Factory
             'codi_ticket' => 'TKT-' . str_pad(self::$counter++, 4, '0', STR_PAD_LEFT),
             'titol'       => fake()->sentence(6),
             'descripcio'  => fake()->optional(0.7)->paragraph(),
-            'estat'       => fake()->randomElement(['NOU', 'OBERT', 'TANCAT']),
+            'estat'       => fake()->randomElement(['NOU', 'ASSIGNAT', 'EN_PROGRES', 'EN_REVISIO', 'TANCAT']),
         ];
     }
 
