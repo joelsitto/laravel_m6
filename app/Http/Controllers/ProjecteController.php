@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bibliotecaris;
 use App\Models\Llibres;
 use App\Models\Projecte;
+use App\Models\Supervisor;
 use Illuminate\Http\Request;
 
 class ProjecteController extends Controller
@@ -27,7 +29,40 @@ class ProjecteController extends Controller
             'nom', 'estat'
         ]));
 
-        return redirect()->route($this->show($projecte->id));
+        return $projecte;
     }
 
+    public function delete(Projecte $projecte)
+    {
+        $projecte->delete();
+
+    }
+
+    public function nochk()
+    {
+        return Projecte::whereDoesntHave('checkpoints')->get();
+    }
+
+    public function assigna(Projecte $projecte, Supervisor $supervisor)
+    {
+
+        $projecte->supervisors()->attach($supervisor->id);
+        $projecte->load(['checkpoints','supervisors']);
+
+        return $projecte;
+    }
+
+    public function edit(Projecte $projecte)
+    {
+        return view('projecte.edit', compact('projecte'));
+    }
+
+    public function update(Request $request, Projecte $projecte)
+    {
+        $projecte->update($request->only(['nom', 'estat']));
+
+        $projecte->load(['checkpoints']);
+
+        return $projecte;
+    }
 }

@@ -1,14 +1,15 @@
-<form action="{{ route('llibres.update', $llibres) }}" method="POST">
+<form action="{{ route('projecte.update', $projecte) }}" method="POST">
     @csrf
 
-    <label for="titol">Titol</label>
-    <input type="text" id="titol" name="titol" value="{{ old('titol', $llibres->titol) }}" required>
+    <label for="nom">Nom</label>
+    <input type="text" id="nom" name="nom" value="{{ old('nom', $projecte->nom) }}" required>
 
-    <label for="categoria">Categoria</label>
-    <select id="categoria" name="categoria" required>
-        <option value="">Selecciona categoria</option>
-        <option value="FICCIO" {{ old('categoria', $llibres->categoria) === 'FICCIO' ? 'selected' : '' }}>FICCIO</option>
-        <option value="NOFICCIO" {{ old('categoria', $llibres->categoria) === 'NOFICCIO' ? 'selected' : '' }}>NOFICCIO</option>
+    <label for="estat">Estat</label>
+    <select id="estat" name="estat" required>
+        <option value="">Selecciona estat</option>
+        <option value="PROPOSTA" {{ old('categoria', $projecte->estat) === 'PROPOSTA' ? 'selected' : '' }}>PROPOSTA</option>
+        <option value="EN_CURS" {{ old('categoria', $projecte->estat) === 'EN_CURS' ? 'selected' : '' }}>EN_CURS</option>
+        <option value="ENTREGAT" {{ old('categoria', $projecte->estat) === 'ENTREGAT' ? 'selected' : '' }}>ENTREGAT</option>
     </select>
 
     <button type="submit">Send</button>

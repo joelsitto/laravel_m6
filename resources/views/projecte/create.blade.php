@@ -1,15 +1,15 @@
 <form action="{{ route('projecte.store') }}" method="POST">
     @csrf
 
-    <label for="nom">Titol</label>
+    <label for="nom">Nom</label>
     <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required>
     @error('nom')
     <div>{{ $message }}</div>
     @enderror
 
-    <label for="estat">Categoria</label>
+    <label for="estat">Estat</label>
     <select id="estat" name="estat" required>
-        <option value="">Selecciona categoria</option>
+        <option value="">Selecciona estat</option>
         <option value="PROPOSTA" selected>PROPOSTA</option>
         <option value="EN_CURS">EN_CURS</option>
         <option value="ENTREGAT">ENTREGAT</option>

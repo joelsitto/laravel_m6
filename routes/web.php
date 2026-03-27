@@ -56,9 +56,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [ProjecteController::class, 'create'])->name('create');
         Route::post('/create', [ProjecteController::class, 'store'])->name('store');
         Route::get('/{projecte}', [ProjecteController::class, 'show'])->name('show');
-        Route::get('/nocheckpoints', [ProjecteController::class, 'nocheckpoints'])->name('nocheckpoints');
+
+        Route::get('/nochk', [ProjecteController::class, 'nochk'])->name('nochk');
         Route::get('/delete/{projecte}', [ProjecteController::class, 'delete'])->name('delete');
+
+
+        Route::post('/edit/{projecte}', [ProjecteController::class, 'update'])->name('update');
+        Route::get('/edit/{projecte}', [ProjecteController::class, 'edit'])->name('edit');
     });
+
+    Route::get('/supervisors/{projecte}/{supervisor}', [ProjecteController::class, 'assigna'])->name('assigna');
+    Route::get('/checkpoints/aprovar/{checkpoint}', [ProjecteController::class, 'aprovar'])->name('aprovar');
+
+
+
 
 
 });
