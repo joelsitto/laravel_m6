@@ -24,8 +24,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'rol',
-        'tarifa_hora',
     ];
 
     /**
@@ -48,20 +46,12 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'tarifa_hora' => 'decimal:2',
         ];
     }
 
 
-    // Un gestor pot gestionar molts projectes
-    public function projectesGestionats(): HasMany
+    public function prestecs(): HasMany
     {
-        return $this->hasMany(Projecte::class, 'gestor_id');
-    }
-
-    // Un desenvolupador pot estar a molts projectes (N:N)
-    public function projectes(): BelongsToMany
-    {
-        return $this->belongsToMany(Projecte::class, 'project_user');
+        return $this->hasMany(Prestecs::class, 'usuari_id');
     }
 }

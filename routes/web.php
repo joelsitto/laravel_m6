@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjecteController;
+use App\Http\Controllers\LlibresController;
+use App\Http\Controllers\PrestecsController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +43,26 @@ Route::middleware('auth')->group(function () {
         Route::put('/{client}',               [ClientController::class, 'update'])->name('update');
         Route::get('/{client}/projectes',     [ClientController::class, 'projectes'])->name('projectes');
     });
+
+    Route::prefix('llibres')->name('llibres.')->group(function () {
+        Route::get('/create', [LlibresController::class, 'create'])->name('create');
+        Route::post('/create', [LlibresController::class, 'store'])->name('store');
+        Route::get('/cataleg', [LlibresController::class, 'index'])->name('index');
+        Route::get('/senseprestecs', [LlibresController::class, 'sensePrestecs'])->name('senseprestecs');
+        Route::get('/eliminar/{llibres}', [LlibresController::class, 'delete'])->name('delete');
+        Route::post('/modificar/{llibres}', [LlibresController::class, 'update'])->name('update');
+        Route::get('/modificar/{llibres}', [LlibresController::class, 'edit'])->name('edit');
+    });
+
+    Route::get('/bibliotecari/assignar/{idLlibre}/{idBibliotecari}', [LlibresController::class, 'assignarBibliotecari'])
+        ->name('bibliotecari.assignar');
+
+    Route::prefix('prestecs')->name('prestecs.')->group(function () {
+        Route::get('/{llibre}/{user}', [PrestecsController::class, 'create'])->name('create');
+    });
+
+    Route::get('/retornar/{idPrestec}', [PrestecsController::class, 'retornar'])->name('prestecs.retornar');
+
 
 });
 
