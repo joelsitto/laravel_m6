@@ -3,49 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
 
 class Projecte extends Model
 {
-    protected $fillable = [
-        'client_id',
-        'gestor_id',
-        'nom',
-        'descripcio',
-        'codi_projecte',
-        'estat',
-        'data_inici',
-        'data_fi_prevista',
-        'data_fi_real',
-        'pressupost_hores_estimades',
-        'pressupost_hores_reals',
-    ];
-
     protected $table = 'projectes';
+    protected $fillable = ['nom', 'estat'];
 
-    protected $casts = [
-        'data_inici'        => 'date',
-        'data_fi_prevista'  => 'date',
-        'data_fi_real'      => 'date',
-    ];
-
-    // Un projecte pertany a un client
-    public function client(): BelongsTo
+    public function checkpoints()
     {
-        return $this->belongsTo(Client::class);
+        return $this->hasMany(Checkpoint::class);
     }
 
-    // Un projecte té un gestor (User)
-    public function gestor(): BelongsTo
+    public function users()
     {
-        return $this->belongsTo(User::class, 'gestor_id');
+        return $this->hasMany(User::class);
     }
 
-    // Un projecte té molts desenvolupadors (N:N)
-    public function desenvolupadors(): BelongsToMany
+    public function supervisors()
     {
-        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id');
+        return $this->belongsToMany(Supervisor::class);
     }
+
 }

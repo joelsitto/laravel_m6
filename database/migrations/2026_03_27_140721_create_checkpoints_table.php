@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_user', function (Blueprint $table) {
+        Schema::create('checkpoints', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projectes')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->boolean('superat');
+            $table->foreignId('projecte_id')->constrained('projectes')->cascadeOnDelete();
+            $table->string('observacions');
             $table->timestamps();
-
-            $table->unique(['project_id', 'user_id']);
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_user');
+        Schema::dropIfExists('checkpoints');
     }
 };

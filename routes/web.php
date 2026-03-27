@@ -22,17 +22,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Projectes
-    Route::prefix('projectes')->name('projectes.')->group(function () {
-        Route::get('/',                       [ProjecteController::class, 'index'])->name('index');
-        Route::get('/create',                 [ProjecteController::class, 'create'])->name('create');
-        Route::post('/',                      [ProjecteController::class, 'store'])->name('store');
-        Route::get('/{projecte}',             [ProjecteController::class, 'show'])->name('show');
-        Route::get('/{projecte}/edit',        [ProjecteController::class, 'edit'])->name('edit');
-        Route::put('/{projecte}',             [ProjecteController::class, 'update'])->name('update');
-        Route::patch('/{projecte}/estat',     [ProjecteController::class, 'canviarEstat'])->name('canviarEstat');
-    });
-
     // Clients
     Route::prefix('clients')->name('clients.')->group(function () {
         Route::get('/',                       [ClientController::class, 'index'])->name('index');
@@ -62,6 +51,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/retornar/{idPrestec}', [PrestecsController::class, 'retornar'])->name('prestecs.retornar');
+
+    Route::prefix('projecte')->name('projecte.')->group(function () {
+        Route::get('/create', [ProjecteController::class, 'create'])->name('create');
+        Route::post('/create', [ProjecteController::class, 'store'])->name('store');
+        Route::get('/{projecte}', [ProjecteController::class, 'show'])->name('show');
+        Route::get('/nocheckpoints', [ProjecteController::class, 'nocheckpoints'])->name('nocheckpoints');
+        Route::get('/delete/{projecte}', [ProjecteController::class, 'delete'])->name('delete');
+    });
 
 
 });

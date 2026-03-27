@@ -15,6 +15,6 @@ class Client extends Model
 
     public function projectes(): HasMany
     {
-        return $this->hasMany(Projecte::class);
+        return $this->hasMany(ProjecteAntic::class);
     }
 }

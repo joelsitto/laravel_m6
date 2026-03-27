@@ -1,11 +1,11 @@
 @extends('layouts.erp')
 
-@section('title', isset($projecte) ? 'Editar Projecte' : 'Nou Projecte')
+@section('title', isset($projecte) ? 'Editar ProjecteAntic' : 'Nou ProjecteAntic')
 
 @section('content')
     <div class="page-header">
         <div>
-            <div class="page-title">{{ isset($projecte) ? 'Editar Projecte' : 'Nou Projecte' }}</div>
+            <div class="page-title">{{ isset($projecte) ? 'Editar ProjecteAntic' : 'Nou ProjecteAntic' }}</div>
             <div
                 class="page-subtitle">{{ isset($projecte) ? $projecte->codi_projecte : 'El codi es generarà automàticament' }}</div>
         </div>
